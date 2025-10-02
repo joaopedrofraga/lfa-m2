@@ -1,0 +1,50 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = String
+Parser = SLR
+#RegularDefinitions
+
+#Tokens
+:[\ \n\t\r\s]+
+show: show
+log: log
+pv: ;
+atribui: "="
+abre: "("
+fecha: ")"
+soma: \+
+subtracao: \-
+multiplicacao: \*
+divisao: "/"
+exponenciacao: \^
+variavel: [a-zA-Z][0-9a-zA-Z]*
+numero: [0,1]+
+#NonTerminals
+<lista_comandos>
+<comando>
+<expressao>
+<termo>
+<pot>
+<unario>
+<fator>
+#Grammar
+<lista_comandos> ::= <comando> | <comando> <lista_comandos> ;
+
+<comando> ::= variavel #15 atribui <expressao> pv #1 | show abre <expressao> fecha pv #2;
+
+<expressao> ::= <termo> | <termo> soma <expressao> #3 | <termo> subtracao <expressao> #4;
+
+<termo> ::= <pot> | <pot> multiplicacao <termo> #5| <pot> divisao <termo> #6;
+
+<pot> ::= <unario> | <unario> exponenciacao <pot> #7;
+
+<unario> ::= soma <unario> #8| subtracao <unario> #9| <fator> #10;
+
+<fator> ::= numero #11| variavel #12| abre <expressao> fecha #13| log abre <expressao> fecha #14;
